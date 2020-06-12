@@ -110,13 +110,12 @@ class Test(tf.test.TestCase):
           metrics_specs=[
               tfma.MetricsSpec(
                   thresholds={
-                      'accuracy':
-                          tfma.config.MetricThreshold(
-                              value_threshold=tfma.GenericValueThreshold(
-                                  lower_bound={'value': 0.6}),
-                              change_threshold=tfma.GenericChangeThreshold(
-                                  direction=tfma.MetricDirection.HIGHER_IS_BETTER,
-                                  absolute={'value': -1e-10}))
+                      'accuracy': tfma.config.MetricThreshold(
+                          value_threshold=tfma.GenericValueThreshold(
+                              lower_bound={'value': 0.6}),
+                          change_threshold=tfma.GenericChangeThreshold(
+                              direction=tfma.MetricDirection.HIGHER_IS_BETTER,
+                              absolute={'value': -1e-10}))
                   })
           ])
       evaluator = Evaluator(
@@ -167,10 +166,10 @@ class Test(tf.test.TestCase):
             output_artifact_name = output_artifact._artifact_type.name
             expected_artifact_name = expected_artifact._artifact_type.name
             if output_artifact_name == expected_artifact_name:
-              self.assertProtoEquals(
-                  output_artifact.artifact_type, expected_artifact.artifact_type)
-              self.assertProtoEquals(
-                  output_artifact.mlmd_artifact, expected_artifact.mlmd_artifact)
+              self.assertProtoEquals(output_artifact.artifact_type,
+                                     expected_artifact.artifact_type)
+              self.assertProtoEquals(output_artifact.mlmd_artifact,
+                                     expected_artifact.mlmd_artifact)
               self.assertProtoEquals(output_artifact.uri, expected_artifact.uri)
               break
           else:
