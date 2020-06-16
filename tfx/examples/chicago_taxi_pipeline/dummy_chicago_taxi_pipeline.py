@@ -191,14 +191,14 @@ if __name__ == '__main__':
       # 0 means auto-detect based on the number of CPUs available during
       # execution time.
       direct_num_workers=0)
-  dummy_factory = DummyExecutorFactory()
-  mock_pipeline.set_dummy_executor('CsvExampleGen', dummy_factory)
-  mock_pipeline.set_dummy_executor('StatisticsGen', dummy_factory)
-  mock_pipeline.set_dummy_executor('SchemaGen', dummy_factory)
-  mock_pipeline.set_dummy_executor('ExampleValidator', dummy_factory)
-  mock_pipeline.set_dummy_executor('Transform', dummy_factory)
-  mock_pipeline.set_dummy_executor('Trainer', dummy_factory)
-  mock_pipeline.set_dummy_executor('Evaluator', dummy_factory)
-  mock_pipeline.set_dummy_executor('Pusher', dummy_factory)
+
+  mock_pipeline.set_dummy_executor('CsvExampleGen')
+  mock_pipeline.set_dummy_executor('StatisticsGen')
+  mock_pipeline.set_dummy_executor('SchemaGen')
+  mock_pipeline.set_dummy_executor('ExampleValidator')
+  mock_pipeline.set_dummy_executor('Transform')
+  mock_pipeline.set_dummy_executor('Trainer')
+  mock_pipeline.set_dummy_executor('Evaluator')
+  mock_pipeline.set_dummy_executor('Pusher')
 
   BeamDagRunner().run(mock_pipeline)

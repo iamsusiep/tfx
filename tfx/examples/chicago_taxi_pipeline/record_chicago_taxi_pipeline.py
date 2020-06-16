@@ -194,14 +194,5 @@ if __name__ == '__main__':
       # 0 means auto-detect based on the number of CPUs available during
       # execution time.
       direct_num_workers=0)
-
-  # pipeline.set_executor('StatisticsGen', make_recorder_executor)
-  # pipeline.set_executor('SchemaGen', make_recorder_executor)
-  # pipeline.set_executor('ExampleValidator', make_recorder_executor)
-  # pipeline.set_executor('Transform', make_recorder_executor)
-  # pipeline.set_executor('Trainer', make_recorder_executor)
-  # pipeline.set_executor('Evaluator', make_recorder_executor)
-  # pipeline.set_executor('Pusher', make_recorder_executor)
-
-
+  pipeline.set_recorder()
   BeamDagRunner().run(pipeline)
