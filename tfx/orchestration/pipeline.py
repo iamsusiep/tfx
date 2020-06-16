@@ -140,7 +140,6 @@ class Pipeline(object):
 
     # Calls property setter.
     self.components = components or []
-    self.mock_executor_spec = {}
     # Mapping component's name to its executor to store dummy executors 
 
   @property
@@ -201,10 +200,10 @@ class Pipeline(object):
     if len(self._components) < len(deduped_components):
       raise RuntimeError('There is a cycle in the pipeline')
 
-  def set_executor(self, component_id: Text, executor_factory: Type[FakeComponentExecutorFactory]) -> None:
+  def set_executor(self, component_id: Text, executor_factory: FakeComponentExecutorFactory) -> None:
     for component in self._components:
       if component_id is component.id:
-        self.mock_executor_spec[component_id] = executor_factory()
+        component.executor_spec = FakeExecutorClassSpec(executor_factory)
 
   def get_artifacts(self, component_id: Text):
     for component in self._components:

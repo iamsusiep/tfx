@@ -49,8 +49,7 @@ class BaseComponentLauncher(with_metaclass(abc.ABCMeta, object)):
       beam_pipeline_args: List[Text],
       additional_pipeline_args: Dict[Text, Any],
       component_config: Optional[
-          base_component_config.BaseComponentConfig] = None,
-      mock_executor_spec: Dict[Text, FakeComponentExecutorFactory]= None
+          base_component_config.BaseComponentConfig] = None
   ):
     """Initialize a BaseComponentLauncher.
 
@@ -90,7 +89,6 @@ class BaseComponentLauncher(with_metaclass(abc.ABCMeta, object)):
     self._additional_pipeline_args = additional_pipeline_args
     self._component_config = component_config
 
-    self.mock_executor_spec = mock_executor_spec
 
     if not self.can_launch(self._component_executor_spec,
                            self._component_config):
@@ -112,8 +110,7 @@ class BaseComponentLauncher(with_metaclass(abc.ABCMeta, object)):
       beam_pipeline_args: List[Text],
       additional_pipeline_args: Dict[Text, Any],
       component_config: Optional[
-          base_component_config.BaseComponentConfig] = None,
-      mock_executor_spec: Dict[Text, FakeComponentExecutorFactory]= None
+          base_component_config.BaseComponentConfig] = None
   ) -> 'BaseComponentLauncher':
     """Initialize a ComponentLauncher directly from a BaseComponent instance.
 
@@ -144,8 +141,7 @@ class BaseComponentLauncher(with_metaclass(abc.ABCMeta, object)):
         metadata_connection=metadata_connection,
         beam_pipeline_args=beam_pipeline_args,
         additional_pipeline_args=additional_pipeline_args,
-        component_config=component_config,
-        mock_executor_spec=mock_executor_spec)
+        component_config=component_config)
 
   @classmethod
   @abc.abstractmethod

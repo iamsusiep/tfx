@@ -245,16 +245,16 @@ class Test(tf.test.TestCase):
         serving_model_dir=serving_model_dir,
         metadata_path=metadata_path,
         direct_num_workers=0) # pipeline dsl
-
-    mock_pipeline.set_executor('CsvExampleGen', FakeComponentExecutorFactory)
-    mock_pipeline.set_executor('StatisticsGen', FakeComponentExecutorFactory)
-    mock_pipeline.set_executor('SchemaGen', FakeComponentExecutorFactory)
-    mock_pipeline.set_executor('ExampleValidator', FakeComponentExecutorFactory)
-    mock_pipeline.set_executor('Transform', FakeComponentExecutorFactory)
-    mock_pipeline.set_executor('Trainer', FakeComponentExecutorFactory)
+    factory = FakeComponentExecutorFactory()
+    mock_pipeline.set_executor('CsvExampleGen', factory)
+    mock_pipeline.set_executor('StatisticsGen', factory)
+    mock_pipeline.set_executor('SchemaGen', factory)
+    mock_pipeline.set_executor('ExampleValidator', factory)
+    mock_pipeline.set_executor('Transform', factory)
+    mock_pipeline.set_executor('Trainer', factory)
     # mock_pipeline.set_executor('ResolverNode.latest_blessed_model_resolver',...)
-    mock_pipeline.set_executor('Evaluator', FakeComponentExecutorFactory)
-    mock_pipeline.set_executor('Pusher', FakeComponentExecutorFactory)
+    mock_pipeline.set_executor('Evaluator', factory)
+    mock_pipeline.set_executor('Pusher', factory)
 
     BeamDagRunner().run(mock_pipeline)
 
