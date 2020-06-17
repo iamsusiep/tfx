@@ -54,7 +54,7 @@ _pipeline_name = 'chicago_taxi_beam'
 
 # This example assumes that the taxi data is stored in ~/taxi/data and the
 # taxi utility function is in ~/taxi.  Feel free to customize this as needed.
-_taxi_root = '/usr/local/google/home/sujip/tΩfx/tfx/examples/chicago_taxi_pipeline'
+_taxi_root = '/usr/local/google/home/sujip/tfx/tfx/examples/chicago_taxi_pipeline'
 # _taxi_root = '/usr/local/google/home/sujip/tfx/tfx/examples/chicago_taxi_pipeline'
 
 _data_root = os.path.join(_taxi_root, 'data', 'simple')
