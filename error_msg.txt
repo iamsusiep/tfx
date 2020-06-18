@@ -1,0 +1,144 @@
+/Users/sujipark/tfx/tfx/orchestration/data_types.py:191: UserWarning: RuntimeParameter is only supported on KubeflowDagRunner currently.
+  warnings.warn('RuntimeParameter is only supported on KubeflowDagRunner '
+INFO:absl:Component ResolverNode.latest_blessed_model_resolver depends on [].
+INFO:absl:Component ResolverNode.latest_blessed_model_resolver is scheduled.
+INFO:absl:Component CsvExampleGen depends on [].
+T4: <class 'tfx.orchestration.beam.beam_dag_runner._ComponentAsDoFn'>
+INFO:dill:T4: <class 'tfx.orchestration.beam.beam_dag_runner._ComponentAsDoFn'>
+# T4
+INFO:dill:# T4
+D2: <dict object at 0x7fa74d128eb0>
+INFO:dill:D2: <dict object at 0x7fa74d128eb0>
+T4: <class 'tfx.orchestration.launcher.in_process_component_launcher.InProcessComponentLauncher'>
+INFO:dill:T4: <class 'tfx.orchestration.launcher.in_process_component_launcher.InProcessComponentLauncher'>
+# T4
+INFO:dill:# T4
+D2: <dict object at 0x7fa74d12b3c0>
+INFO:dill:D2: <dict object at 0x7fa74d12b3c0>
+T4: <class 'tfx.orchestration.data_types.PipelineInfo'>
+INFO:dill:T4: <class 'tfx.orchestration.data_types.PipelineInfo'>
+# T4
+INFO:dill:# T4
+D2: <dict object at 0x7fa74d04c230>
+INFO:dill:D2: <dict object at 0x7fa74d04c230>
+# D2
+INFO:dill:# D2
+T4: <class 'tfx.orchestration.data_types.ComponentInfo'>
+INFO:dill:T4: <class 'tfx.orchestration.data_types.ComponentInfo'>
+# T4
+INFO:dill:# T4
+D2: <dict object at 0x7fa74d12a910>
+INFO:dill:D2: <dict object at 0x7fa74d12a910>
+# D2
+INFO:dill:# D2
+T4: <class 'tfx.orchestration.data_types.DriverArgs'>
+INFO:dill:T4: <class 'tfx.orchestration.data_types.DriverArgs'>
+# T4
+INFO:dill:# T4
+D2: <dict object at 0x7fa74d123780>
+INFO:dill:D2: <dict object at 0x7fa74d123780>
+# D2
+INFO:dill:# D2
+T4: <class 'tfx.components.example_gen.driver.Driver'>
+INFO:dill:T4: <class 'tfx.components.example_gen.driver.Driver'>
+# T4
+INFO:dill:# T4
+Traceback (most recent call last):
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/internal/pickler.py", line 254, in dumps
+    s = dill.dumps(o)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 265, in dumps
+    dump(obj, file, protocol, byref, fmode, recurse, **kwds)#, strictio)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 259, in dump
+    Pickler(file, protocol, **_kwds).dump(obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 445, in dump
+    StockPickler.dump(self, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 437, in dump
+    self.save(obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 549, in save
+    self.save_reduce(obj=obj, *rv)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 662, in save_reduce
+    save(state)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 504, in save
+    f(self, obj) # Call unbound method with explicit self
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/internal/pickler.py", line 221, in new_save_module_dict
+    return old_save_module_dict(pickler, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 912, in save_module_dict
+    StockPickler.save_dict(pickler, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 859, in save_dict
+    self._batch_setitems(obj.items())
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 885, in _batch_setitems
+    save(v)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 549, in save
+    self.save_reduce(obj=obj, *rv)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 662, in save_reduce
+    save(state)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 504, in save
+    f(self, obj) # Call unbound method with explicit self
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/internal/pickler.py", line 221, in new_save_module_dict
+    return old_save_module_dict(pickler, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 912, in save_module_dict
+    StockPickler.save_dict(pickler, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 859, in save_dict
+    self._batch_setitems(obj.items())
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 885, in _batch_setitems
+    save(v)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 524, in save
+    rv = reduce(self.proto)
+  File "/Users/sujipark/tfx/tfx/components/base/executor_spec.py", line 61, in __reduce__
+    self.executor_class.__name__)
+AttributeError: 'DummyExecutorFactory' object has no attribute '__name__'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/sujipark/tfx/tfx/examples/chicago_taxi_pipeline/dummy_chicago_taxi_pipeline.py", line 203, in <module>
+    BeamDagRunner().run(mock_pipeline)
+  File "/Users/sujipark/tfx/tfx/orchestration/beam/beam_dag_runner.py", line 161, in run
+    *[beam.pvalue.AsIter(s) for s in signals_to_wait]))
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/transforms/core.py", line 1236, in __init__
+    super(ParDo, self).__init__(fn, *args, **kwargs)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/transforms/ptransform.py", line 788, in __init__
+    self.fn = pickler.loads(pickler.dumps(self.fn))
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/internal/pickler.py", line 258, in dumps
+    s = dill.dumps(o)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 265, in dumps
+    dump(obj, file, protocol, byref, fmode, recurse, **kwds)#, strictio)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 259, in dump
+    Pickler(file, protocol, **_kwds).dump(obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 445, in dump
+    StockPickler.dump(self, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 437, in dump
+    self.save(obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 549, in save
+    self.save_reduce(obj=obj, *rv)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 662, in save_reduce
+    save(state)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 504, in save
+    f(self, obj) # Call unbound method with explicit self
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/internal/pickler.py", line 221, in new_save_module_dict
+    return old_save_module_dict(pickler, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 912, in save_module_dict
+    StockPickler.save_dict(pickler, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 859, in save_dict
+    self._batch_setitems(obj.items())
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 885, in _batch_setitems
+    save(v)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 549, in save
+    self.save_reduce(obj=obj, *rv)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 662, in save_reduce
+    save(state)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 504, in save
+    f(self, obj) # Call unbound method with explicit self
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/internal/pickler.py", line 221, in new_save_module_dict
+    return old_save_module_dict(pickler, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 912, in save_module_dict
+    StockPickler.save_dict(pickler, obj)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 859, in save_dict
+    self._batch_setitems(obj.items())
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 885, in _batch_setitems
+    save(v)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/pickle.py", line 524, in save
+    rv = reduce(self.proto)
+  File "/Users/sujipark/tfx/tfx/components/base/executor_spec.py", line 61, in __reduce__
+    self.executor_class.__name__)
+AttributeError: 'DummyExecutorFactory' object has no attribute '__name__'
