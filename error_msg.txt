@@ -1,0 +1,47 @@
+Switched to a new branch 'dynamic_func'
+(tfx) Sus-MacBook-Pro:tfx sujipark$ python tfx/examples/chicago_taxi_pipeline/dummy_chicago_taxi_pipeline.py
+/Users/sujipark/tfx/tfx/orchestration/data_types.py:191: UserWarning: RuntimeParameter is only supported on KubeflowDagRunner currently.
+  warnings.warn('RuntimeParameter is only supported on KubeflowDagRunner '
+INFO:absl:Component ResolverNode.latest_blessed_model_resolver depends on [].
+INFO:absl:Component ResolverNode.latest_blessed_model_resolver is scheduled.
+INFO:absl:Component CsvExampleGen depends on [].
+Traceback (most recent call last):
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/internal/pickler.py", line 283, in loads
+    return dill.loads(s)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 275, in loads
+    return load(file, ignore, **kwds)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 270, in load
+    return Unpickler(file, ignore=ignore, **kwds).load()
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 472, in load
+    obj = StockUnpickler.load(self)
+  File "/Users/sujipark/tfx/tfx/components/base/executor_spec.py", line 67, in _reconstruct_from_executor_class_path
+    executor_class = import_utils.import_class_by_path(executor_class_path)
+  File "/Users/sujipark/tfx/tfx/utils/import_utils.py", line 42, in import_class_by_path
+    return getattr(mod, classname)
+AttributeError: module 'tfx.experimental.dummy_executor' has no attribute 'DummyExecutor'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "tfx/examples/chicago_taxi_pipeline/dummy_chicago_taxi_pipeline.py", line 204, in <module>
+    BeamDagRunner().run(mock_pipeline)
+  File "/Users/sujipark/tfx/tfx/orchestration/beam/beam_dag_runner.py", line 161, in run
+    *[beam.pvalue.AsIter(s) for s in signals_to_wait]))
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/transforms/core.py", line 1236, in __init__
+    super(ParDo, self).__init__(fn, *args, **kwargs)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/transforms/ptransform.py", line 788, in __init__
+    self.fn = pickler.loads(pickler.dumps(self.fn))
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/apache_beam/internal/pickler.py", line 287, in loads
+    return dill.loads(s)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 275, in loads
+    return load(file, ignore, **kwds)
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 270, in load
+    return Unpickler(file, ignore=ignore, **kwds).load()
+  File "/Users/sujipark/opt/anaconda3/envs/tfx/lib/python3.7/site-packages/dill/_dill.py", line 472, in load
+    obj = StockUnpickler.load(self)
+  File "/Users/sujipark/tfx/tfx/components/base/executor_spec.py", line 67, in _reconstruct_from_executor_class_path
+    executor_class = import_utils.import_class_by_path(executor_class_path)
+  File "/Users/sujipark/tfx/tfx/utils/import_utils.py", line 42, in import_class_by_path
+    return getattr(mod, classname)
+AttributeError: module 'tfx.experimental.dummy_executor' has no attribute 'DummyExecutor'
+
