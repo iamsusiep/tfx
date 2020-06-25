@@ -31,6 +31,8 @@ class BaseDummyExecutor(base_executor.BaseExecutor):
   def __init__(self, component_id, record_dir, context):
     super(BaseDummyExecutor, self).__init__(context)
     absl.logging.info("Running DummyExecutor, component_id %s", component_id)
+    if not os.path.exists(record_dir):
+      raise Exception("Must record input/output in {}".format(record_dir))
     self._component_id = component_id
     self._record_dir = record_dir
 
