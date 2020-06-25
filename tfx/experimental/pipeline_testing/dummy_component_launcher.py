@@ -65,7 +65,7 @@ def create_dummy_launcher_class(record_dir, component_ids, custom_component_map)
         executor = self._custom_component_map[component_id](executor_context)
         executor.Do(input_dict, output_dict, exec_properties)
       else:
-        super(BaseDummyComponentLauncher, self)._run_executor(execution_id,
+        super(DummyComponentLauncher, self)._run_executor(execution_id,
                                                               input_dict,
                                                               output_dict,
                                                               exec_properties)
