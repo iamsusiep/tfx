@@ -43,9 +43,8 @@ from tfx.types import Channel
 from tfx.types.standard_artifacts import Model
 from tfx.types.standard_artifacts import ModelBlessing
 from tfx.utils.dsl_utils import external_input
-from tfx.experimental.pipeline_testing.dummy_executor import BaseDummyExecutor 
+from tfx.experimental.pipeline_testing.dummy_executor import CustomDummyExecutor 
 from tfx.experimental.pipeline_testing import dummy_component_launcher
-from tfx.components.trainer.executor import Executor
 from tfx.experimental.pipeline_testing import executor_verifier
 
 _pipeline_name = 'chicago_taxi_beam'
@@ -195,8 +194,8 @@ if __name__ == '__main__':
   component_ids = ['CsvExampleGen', \
                   'StatisticsGen', 'SchemaGen', \
                   'ExampleValidator', 'Transform', \
-                  'Evaluator', 'Pusher']
-  component_map = {'Trainer': Executor}
+                  'Trainer', 'Evaluator', 'Pusher']
+  # component_map = {'Trainer': CustomDummyExecutor}
 
   MyDummyLauncher = \
       dummy_component_launcher.create_dummy_launcher_class(record_dir,
@@ -207,7 +206,12 @@ if __name__ == '__main__':
           MyDummyLauncher,
       ],
       )).run(mock_pipeline)
+
+  def custom_verifier(component_id, output_dict):
+    print("custom_verfier called")
+    return True
+
   verifier = executor_verifier.ExecutorVerifier(record_dir, mock_pipeline.pipeline_info,
                               mock_pipeline.metadata_connection_config)
-  # verifier.set_verifier()
-  verifier.verify(['Trainer'])
+  verifier.set_verifier({'CsvExampleGen': custom_verfier})
+  verifier.verify(['ExampleValidator', 'Trainer', 'Evaluator'])

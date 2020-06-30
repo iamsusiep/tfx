@@ -42,9 +42,9 @@ from tfx.types import artifact_utils
 from tfx.utils import io_utils
 from tfx.utils import path_utils
 from google.protobuf import json_format
+from tensorflow_metadata.proto.v0 import anomalies_pb2
 
 class ExecutorVerifier(object):
-  # def __init__(self, component_ids, pipeline_info, metadata_connection_config, threshold=0.5):
   def __init__(self, record_dir, pipeline_info, metadata_connection_config, threshold=0.5):
     """
     threshold: between 0 and 1
@@ -62,7 +62,7 @@ class ExecutorVerifier(object):
                           'Trainer': self.trainer_verifier,
                           'Evaluator': self.evaluator_verifier}
 
-  def trainer_verifier(self, output_dict):
+  def trainer_verifier(self, component_id, output_dict):
     # compares two model files
     model_uri = output_dict['model'][0].uri
 
@@ -70,16 +70,38 @@ class ExecutorVerifier(object):
     path = os.path.join(self._record_dir, component_id, 'model')
     print(path)
     print(model_uri, component_id)
-    pass
 
-  def evaluator_verifier(self, output_dict):
+  def evaluator_verifier(self, component_id, output_dict):
     # compares two evaluation proto files
-    pass
+    eval_result = tfma.load_eval_result(output_dict['evaluation'].uri),slicing_metrics
+    expected_eval_result = tfma.load_eval_result(os.path.join(record_dir, component_id, 'evaluation')).slicing_metrics
+    # tfma.load_validation_result(output_dict['blessing'].uri, "BLESSED")
+    # tfma.load_validation_result(os.path.join(record_dir, component_id, 'blessing'))
+    for eval_slice_metric, expected_eval_slice_metric in zip(eval_result.slicing_metrics, expected_eval_result.slicing_metrics):
+        assert eval_slice_metric[0] == expected_eval_slice_metric[0]
+        for output_name, output_dict in eval_slice_metric[1].items():
+          for sub_key, sub_dict in output_dict.items():
+            for metric_name, value_dict in sub_dict.items():
+              value = value_dict['doubleValue']
+              expected_value = expected_eval_slice_metric[1][output_name][sub_key][metric_name]['doubleValue']
+              if value != expected_value:
+                if expected_value:
+                  relative_diff = abs(value - expected_value)/abs(expected_value)
+                  if not (expected_value and relative_diff <= self.threshold):
+                    absl.logging.warning("Relative difference {} exceeded threshold {}".format(relative_diff, self.threshold))
+                else:
+                  absl.logging.warning("metric_name {} value {} expected_value {}".format(metric_name, value, expected_value))
 
-  def validator_verifier(self, output_dict):
+  def validator_verifier(self, component_id, output_dict):
     # compares two validation proto files
-
-    pass
+    anomalies = io_utils.parse_pbtxt_file(
+        os.path.join(output_dict['anomalies'].uri, 'anomalies.pbtxt'),
+        anomalies_pb2.Anomalies())
+    expected_anomalies = io_utils.parse_pbtxt_file(
+      os.path.join(output_dict['anomalies'].uri, 'anomalies.pbtxt'),
+      anomalies_pb2.Anomalies())
+    if (expected_anomalies.anomaly_info != anomalies.anomaly_info):
+      absl.logging.warning("anomaly info different")
 
   def set_verifier(self, component_id: Text, verifier_fn:types.FunctionType):
     # compares user verifier
@@ -102,4 +124,4 @@ class ExecutorVerifier(object):
                 output_dict[step.key] = artifacts
         verifier_fn = self._verifier_map.get(component_id, None)
         if verifier_fn:
-          verifier_fn(output_dict)
+          verifier_fn(component_id, output_dict)
