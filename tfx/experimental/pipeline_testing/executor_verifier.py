@@ -16,36 +16,26 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import argparse
+import absl
 import os
 import types
-from distutils.dir_util import copy_tree
-
-import tensorflow as tf
-import tensorflow_data_validation as tfdv
 from typing import Text
 
-import absl
-import tensorflow_transform as tft
-import tensorflow_model_analysis as tfma
-from tfx.components.evaluator import constants
-
-from tfx.orchestration import data_types
-from collections import defaultdict
-from tfx.components.trainer import fn_args_utils
-from tfx.types import artifact_utils
-from tfx.proto import evaluator_pb2
-from tfx.utils import io_utils
-from tfx.utils import path_utils
 from tensorflow_metadata.proto.v0 import anomalies_pb2
+import tensorflow_model_analysis as tfma
+from tfx.utils import io_utils
 from tfx.experimental.pipeline_testing import verifier_utils
 
 class ExecutorVerifier(object):
-  def __init__(self, record_dir, pipeline_info, metadata_connection_config, threshold=0.5):
+  """ExecutorVerifier for verifying executor outputs"""
+  def __init__(self, record_dir,
+               pipeline_info,
+               metadata_connection_config,
+               threshold=0.5):
     """
     threshold: between 0 and 1
     components_id: components to verify
-    pipeline_info: for current pipeline 
+    pipeline_info: for current pipeline
     metadata_connection_config: for current pipeline
     """
     self._record_dir = record_dir
@@ -58,49 +48,53 @@ class ExecutorVerifier(object):
                           'Trainer': self.trainer_verifier,
                           'Evaluator': self.evaluator_verifier}
     self.component_output_map = verifier_utils.get_component_output_map(
-                                metadata_connection_config, pipeline_info)
+        metadata_connection_config, pipeline_info)
 
   def trainer_verifier(self, component_id, output_dict):
-    # compares two model files
+    """compares two model files"""
     print("trainer_verifier")
-    model_uri = output_dict['model'].uri
+    model_artifact = output_dict['model']
+    model_uri = model_dict.uri
 
-    component_id = output_dict['model'].custom_properties['producer_component'].string_value
+    component_id = \
+          model_artifact.custom_properties['producer_component'].string_value
     path = os.path.join(self._record_dir, component_id, 'model')
-
-    print(path)
-    print(model_uri, component_id)
+    verifier_utils.compare_model_file_sizes(model_uri, path, self._threshold)
 
   def evaluator_verifier(self, component_id, output_dict):
-    # compares two evaluation proto files
+    """compares two evaluation proto files"""
     print("evaluator_verifier")
     eval_result = tfma.load_eval_result(output_dict['evaluation'].uri)
-    expected_eval_result = tfma.load_eval_result(os.path.join(self._record_dir, component_id, 'evaluation'))
-    verifier_utils.compare_eval_results(eval_result, expected_eval_result, self._threshold)
+    expected_eval_result = tfma.load_eval_result(os.path.join(self._record_dir,
+                                                              component_id,
+                                                              'evaluation'))
+    verifier_utils.compare_eval_results(eval_result,
+                                        expected_eval_result,
+                                        self._threshold)
     # tfma.load_validation_result(output_dict['blessing'].uri, "BLESSED")
     # tfma.load_validation_result(os.path.join(record_dir, component_id, 'blessing'))
-    
+
   def validator_verifier(self, component_id, output_dict):
-    # compares two validation proto files
-    print("validator_verifier")
+    """compares two validation proto files"""
+    print("validator_verifier", component_id)
     print("output_dict", output_dict)
     anomalies = io_utils.parse_pbtxt_file(
         os.path.join(output_dict['anomalies'].uri, 'anomalies.pbtxt'),
         anomalies_pb2.Anomalies())
     expected_anomalies = io_utils.parse_pbtxt_file(
-      os.path.join(output_dict['anomalies'].uri, 'anomalies.pbtxt'),
-      anomalies_pb2.Anomalies())
-    if (expected_anomalies.anomaly_info != anomalies.anomaly_info):
+        os.path.join(output_dict['anomalies'].uri, 'anomalies.pbtxt'),
+        anomalies_pb2.Anomalies())
+    if expected_anomalies.anomaly_info != anomalies.anomaly_info:
       absl.logging.warning("anomaly info different")
 
-  def set_verifier(self, component_id: Text, verifier_fn:types.FunctionType):
+  def set_verifier(self, component_id: Text, verifier_fn: types.FunctionType):
     # compares user verifier
     self._verifier_map[component_id] = verifier_fn
 
-  def verify(self, component_ids = []):
-      for component_id in component_ids:
-        verifier_fn = self._verifier_map.get(component_id, None)
-        if verifier_fn:
-          print("verifying {}".format(component_id))
-          assert component_id in self.component_output_map
-          verifier_fn(component_id, self.component_output_map[component_id])
+  def verify(self, component_ids):
+    for component_id in component_ids:
+      verifier_fn = self._verifier_map.get(component_id, None)
+      if verifier_fn:
+        print("verifying {}".format(component_id))
+        assert component_id in self.component_output_map
+        verifier_fn(component_id, self.component_output_map[component_id])
