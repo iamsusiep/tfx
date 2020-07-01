@@ -1,5 +1,5 @@
 # Lint as: python2, python3
-# Copyright 2019 Google LLC. All Rights Reserved.
+# Copyright 2020 Google LLC. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ from tfx.types import Channel
 from tfx.types.standard_artifacts import Model
 from tfx.types.standard_artifacts import ModelBlessing
 from tfx.utils.dsl_utils import external_input
-from tfx.experimental.pipeline_testing.dummy_executor import CustomDummyExecutor 
+# from tfx.experimental.pipeline_testing.dummy_executor import CustomDummyExecutor 
 from tfx.experimental.pipeline_testing import dummy_component_launcher
 from tfx.experimental.pipeline_testing import executor_verifier
 
@@ -189,13 +189,14 @@ if __name__ == '__main__':
       direct_num_workers=0)
   record_dir = os.path.join(os.environ['HOME'],
                             'tfx/tfx/experimental/pipeline_testing/',
-                            'examples/chicago_taxi_pipeline/testdata')
+                            'examples/chicago_taxi_pipeline/testdata1')
 
   component_ids = ['CsvExampleGen', \
                   'StatisticsGen', 'SchemaGen', \
                   'ExampleValidator', 'Transform', \
-                  'Trainer', 'Evaluator', 'Pusher']
+                  'Trainer', 'Pusher']
   # component_map = {'Trainer': CustomDummyExecutor}
+  component_map = {}
 
   MyDummyLauncher = \
       dummy_component_launcher.create_dummy_launcher_class(record_dir,
@@ -213,5 +214,5 @@ if __name__ == '__main__':
 
   verifier = executor_verifier.ExecutorVerifier(record_dir, mock_pipeline.pipeline_info,
                               mock_pipeline.metadata_connection_config)
-  verifier.set_verifier({'CsvExampleGen': custom_verfier})
+  verifier.set_verifier('CsvExampleGen', custom_verifier)
   verifier.verify(['ExampleValidator', 'Trainer', 'Evaluator'])
