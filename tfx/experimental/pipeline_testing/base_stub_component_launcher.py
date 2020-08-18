@@ -91,7 +91,7 @@ class BaseStubComponentLauncher(
                     exec_properties: Dict[Text, Any]) -> None:
     """Execute underlying component implementation."""
     component_id = self._component_info.component_id
-    if component_id in self.test_component_ids or component_id.startswith('ResolverNode'):
+    if component_id in self.test_component_ids:# or component_id.startswith('ResolverNode'):
       super(BaseStubComponentLauncher,
             self)._run_executor(execution_id, input_dict, output_dict,
                                 exec_properties)

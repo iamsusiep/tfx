@@ -34,7 +34,6 @@ from tfx.utils import io_utils
 
 class BaseEndToEndTest(tf.test.TestCase):
   """This test covers step 1~6 of the accompanying document[1] for taxi template.
-
   [1]https://github.com/tensorflow/tfx/blob/master/docs/tutorials/tfx/template.ipynb
   """
 
@@ -62,7 +61,17 @@ class BaseEndToEndTest(tf.test.TestCase):
     super(BaseEndToEndTest, self).tearDown()
     os.chdir(self._old_cwd)
 
-  def _runCli(self, args: List[Text]) -> click_testing.Result:
+  def _cleanup_with_retry(self, method):
+    max_num_trial = 3
+    for _ in range(max_num_trial):
+      try:
+        method()
+      except Exception as err:  # pylint:disable=broad-except
+        logging.info(err)
+      else:
+        break
+
+  def _run_cli(self, args: List[Text]) -> click_testing.Result:
     logging.info('Running cli: %s', args)
     result = self._cli_runner.invoke(cli_group, args)
     logging.info('%s', result.output)
@@ -73,7 +82,7 @@ class BaseEndToEndTest(tf.test.TestCase):
 
     return result
 
-  def _addAllComponents(self) -> Text:
+  def _add_all_components(self) -> Text:
     """Change 'pipeline.py' file to put all components into the pipeline."""
     return self._uncomment(
         os.path.join('pipeline', 'pipeline.py'), ['components.append('])
@@ -81,10 +90,10 @@ class BaseEndToEndTest(tf.test.TestCase):
   def _uncomment(self, filepath: Text, expressions: Iterable[Text]) -> Text:
     """Update given file by uncommenting the `expression`."""
     replacements = [('# ' + s, s) for s in expressions]
-    return self._replaceFileContent(filepath, replacements)
+    return self._replace_file_content(filepath, replacements)
 
-  def _replaceFileContent(self, filepath: Text,
-                          replacements: Iterable[Tuple[Text, Text]]) -> Text:
+  def _replace_file_content(self, filepath: Text,
+                            replacements: Iterable[Tuple[Text, Text]]) -> Text:
     """Update given file using `replacements`."""
     path = os.path.join(self._project_dir, filepath)
     with open(path) as fp:
@@ -94,10 +103,9 @@ class BaseEndToEndTest(tf.test.TestCase):
     io_utils.write_string_file(path, content)
     return path
 
-  def _uncommentMultiLineVariables(self, filepath: Text,
-                                   variables: Iterable[Text]) -> Text:
+  def _uncomment_multiline_variables(self, filepath: Text,
+                                     variables: Iterable[Text]) -> Text:
     """Update given file by uncommenting a variable.
-
     The variable should be defined in following form.
     # ....
     # VARIABLE_NAME = ...
@@ -105,27 +113,24 @@ class BaseEndToEndTest(tf.test.TestCase):
     #
     #   long indented line
     # OTHER STUFF
-
     Above comments will become
-
     # ....
     VARIABLE_NAME = ...
       long indented line
-
       long indented line
     # OTHER STUFF
-
     Arguments:
       filepath: file to modify.
       variables: List of variables.
-
     Returns:
       Absolute path of the modified file.
     """
     path = os.path.join(self._project_dir, filepath)
     result = []
     commented_variables = ['# ' + variable + ' =' for variable in variables]
+    commented_arguments = ['# ' + variable + '=[' for variable in variables]
     in_variable_definition = False
+    in_argument_definition = False
 
     with open(path) as fp:
       for line in fp:
@@ -138,20 +143,37 @@ class BaseEndToEndTest(tf.test.TestCase):
             continue
           else:
             in_variable_definition = False
+        if in_argument_definition:
+          if line.lstrip().startswith("# "):
+            if "]" in line:
+              result.append(line.replace("# ", ""))
+              in_argument_definition = False
+              continue
+            else:
+              result.append(line.replace("# ", ""))
+              continue
+        uncommented = False
         for commented_var in commented_variables:
           if line.startswith(commented_var):
             in_variable_definition = True
             result.append(line[2:])
+            uncommented = True
             break
-        else:
+        for commented_var in commented_arguments:
+          if line.lstrip().startswith(commented_var):
+            in_argument_definition = True
+            result.append(line.replace("# ", ''))
+            uncommented = True
+            break
+        if not uncommented:
           # doesn't include a variable definition to uncomment.
           result.append(line)
 
     io_utils.write_string_file(path, ''.join(result))
     return path
 
-  def _copyTemplate(self):
-    result = self._runCli([
+  def _copy_template(self):
+    result = self._run_cli([
         'template',
         'copy',
         '--pipeline_name',

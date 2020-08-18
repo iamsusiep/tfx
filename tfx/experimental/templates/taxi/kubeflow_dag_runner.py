@@ -20,6 +20,7 @@ from __future__ import print_function
 import os
 from absl import logging
 
+from tfx.experimental.templates.taxi.launcher import stub_component_launcher  # pylint: disable=unused-import
 from tfx.experimental.templates.taxi.pipeline import configs
 from tfx.experimental.templates.taxi.pipeline import pipeline
 from tfx.orchestration.kubeflow import kubeflow_dag_runner
@@ -71,6 +72,11 @@ def run():
   tfx_image = os.environ.get('KUBEFLOW_TFX_IMAGE', None)
 
   runner_config = kubeflow_dag_runner.KubeflowDagRunnerConfig(
+      # TODO(StubExecutor): Uncomment below to use stub executors.
+      # Refer to tfx/docs/tutorials/stub_template.md for more information.
+      # supported_launcher_classes=[
+      #     stub_component_launcher.StubComponentLauncher
+      # ],
       kubeflow_metadata_config=metadata_config, tfx_image=tfx_image)
   pod_labels = kubeflow_dag_runner.get_default_pod_labels()
   pod_labels.update({telemetry_utils.LABEL_KFP_SDK_ENV: 'tfx-template'})
