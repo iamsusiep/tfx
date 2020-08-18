@@ -19,7 +19,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-from typing import Any, Dict, List, Text, Type
+from typing import Any, Dict, List, Text
 
 from tfx import types
 from tfx.components.base import base_executor
